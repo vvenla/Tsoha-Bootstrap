@@ -1,10 +1,17 @@
 ﻿# Tietokantasovelluksen esittelysivu
 
+
 Yleisiä linkkejä:
 
+
 * [Linkki sovellukseeni](http://vvenla.users.cs.helsinki.fi/todo/)
+
 * [Linkki dokumentaatiooni](doc/dokumentaatio.pdf)
+
+* [Linkki näkymien suunnitelmiin](http://vvenla.users.cs.helsinki.fi/todo/main) (vaihtuu yläpalkista klikkailemalla)
+
 
 ## Työn aihe
 
-Laita tähän aihekuvaus tai [linkki valmiiseen aiheeseen](http://advancedkittenry.github.io/suunnittelu_ja_tyoymparisto/aiheet/Muistilista.html) 
+Työn aihe on To do -sovellus, joka pohjautuu valmiiseen Muistilista-aiheeseen. Aihe tarkentuu ja muokkaantuu projektin edetessä.
+[Linkki valmiiseen aiheeseen](http://advancedkittenry.github.io/suunnittelu_ja_tyoymparisto/aiheet/Muistilista.html) 

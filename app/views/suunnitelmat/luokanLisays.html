@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Lisää luokka</h1>
+
+<form>
+
+    <div class="form-group">
+        <label>Luokka</label>
+        <input type="text" class="form-control" value="Kouluhommat">
+    </div>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Valitse yläluokka (valinnainen)
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="#">Kiireelliset</a></li>
+            <li><a href="#">Kiireettömät</a></li>
+        </ul>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Tallenna</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Lisää tehtävä</h1>
+
+<form>
+
+    <div class="form-group">
+        <label>Tehtävä</label>
+        <input type="text" class="form-control" value="Pese uuni">
+    </div>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Valitse luokka (valinnainen)
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="#">Kotihommat</a></li>
+            <li><a href="#">Kouluhommat</a></li>
+        </ul>
+    </div>
+    <div class="form-group">
+        <label>Huomioita</label>
+        <input type="text" class="form-control" value="Osta pesuainetta!">
+    </div>
+    <div class="form-group">
+        <label>Deadline (valinnainen)</label>
+        <input type="text" class="form-control" value="pp/kk/vvvv">
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Tallenna</button>
+    </div>
+</form>
+{% endblock %}

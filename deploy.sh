@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Missä kansiossa komento suoritetaan
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+DIR=./
 
 source $DIR/config/environment.sh
 
