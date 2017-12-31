@@ -2,69 +2,42 @@
 {% block content %}
 <h1>To do (Venla)</h1>
 
-<h2>Kotihommat</h2>
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th>Tehtävä</th>
-            <th>Luotu</th>
-            <th>Status</th>
-            <th>Huomioita</th>
-            <th>(Deadline)</th>
-            <th><a class="btn btn-default btn-sm" href="#">Muokkaa luokkaa</a></th>
+            <th>Kotihommat
+                <a class="btn btn-default btn-sm" href="#">Muokkaa</a>
+                <a class="btn btn-default btn-sm" href="#">Poista luokka</a>
+            </th>
         </tr>
     </thead>
 
     <tbody>
         <!-- Listataan tehtävät tähän -->
         <tr>
-            <td>Pese uuni</td>
-            <td>11.11.2017</td>
-            <td>
-                <div class='dropdown'><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Aloittamatta
-                        <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Aloitettu</a></li>
-                        <li><a href="#">Loppusuoralla</a></li>
-                    </ul></div>
-            </td>
-            <td>Osta pesuainetta!</td>
-            <td></td>
-            <th><a class="btn btn-default btn-sm" href="#">Muokkaa</a>
-                <a class="btn btn-default btn-sm" href="#">Tehty!</a></th>
+            <td>Pese uuni
+                <a class="btn btn-default btn-sm" href="#">Näytä/Muokkaa</a>
+                <a class="btn btn-default btn-sm" href="#">Tehty!</a>
         </tr>
     </tbody>
 </table>
-<h2>Kouluhommat</h2>
 <table class="table table-striped table-bordered">    
     <thead>
         <tr>
-            <th>Tehtävä</th>
-            <th>Luotu</th>
-            <th>Status</th>
-            <th>Huomioita</th>
-            <th>(Deadline)</th>
-            <th><a class="btn btn-default btn-sm" href="#">Muokkaa luokkaa</a></th>
+            <th>Kouluhommat
+                <a class="btn btn-default btn-sm" href="#">Näytä/Muokkaa</a>
+                <a class="btn btn-default btn-sm" href="#">Poista luokka</a>
+            </th>
         </tr>
     </thead>
 
     <tbody>
         <!-- Listataan tehtävät tähän -->
         <tr>
-            <td>Lue tenttiin</td>
-            <td>15.12.2017</td>
-            <td>
-                <div class='dropdown'><button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Aloittamatta
-                        <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Aloitettu</a></li>
-                        <li><a href="#">Loppusuoralla</a></li>
-                    </ul></div>
+            <td>Tentti           
+                <a class="btn btn-default btn-sm" href="#">Muokkaa</a>
+                <a class="btn btn-default btn-sm" href="#">Tehty!</a>            
             </td>
-            <td>Vanhat laskaritehtävät!</td>
-            <td>31.12.2017</td>
-            <th><a class="btn btn-default btn-sm" href="#">Muokkaa</a>
-                <a class="btn btn-default btn-sm" href="#">Tehty!</a></th>
         </tr>
     </tbody>
 </table>

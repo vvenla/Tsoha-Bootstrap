@@ -4,28 +4,20 @@ CREATE TABLE Kayttaja(
     salasana varchar(50) NOT NULL
 );
 
-CREATE TABLE Tarkeys(
+CREATE TABLE Tehtava(
     id SERIAL PRIMARY KEY,
-    aste integer
+    luokkaId integer REFERENCES Luokka(id),
+    nimi varchar(30) NOT NULL,
+    kuvaus varchar(90)
+    deadline date,
 );
 
 CREATE TABLE Luokka(
     id SERIAL PRIMARY KEY,
-    tarkeysId integer REFERENCES Tarkeys(id),
     nimi varchar(30) NOT NULL
 );
 
-CREATE TABLE Tehtava(
-    id SERIAL PRIMARY KEY,
-    tarkeysId integer REFERENCES Tarkeys(id),
-    nimi varchar(30) NOT NULL,
-    luotu date,
-    status varchar(20),
-    deadline date,
-    huomioita varchar(90)
-);
-
-CREATE TABLE TehtavaLuokka(
+CREATE TABLE KayttajaTehtava(
     tehtavaId integer REFERENCES Tehtava(id),
-    luokkaId integer REFERENCES Luokka(id)
+    kayttajaId integer REFERENCES Kayttaja(id)
 );
