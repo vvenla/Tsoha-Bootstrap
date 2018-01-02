@@ -22,3 +22,11 @@ $routes->get('/class', function() {
 $routes->get('/login', function() {
     HelloWorldController::login();
 });
+
+$routes->get('/luokka', function(){
+  LuokkaController::index();
+});
+
+$routes->get('/tehtava', function(){
+    TehtavaController::index();
+});

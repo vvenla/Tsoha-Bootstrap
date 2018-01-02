@@ -1,16 +1,35 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<h1>Muokkaa tehtävää</h1>
+
+<form>
+
+    <div class="form-group">
+        <label>Nimi: *</label>
+        <input type="text" class="form-control" value="{{base_path}}/tehtava/{{tehtava.id}}">{{tehtava.nimi}}>
+    </div>
+    <div class="form-group">
+        <label>Kuvaus:</label>
+        <input type="text" class="form-control" value="{{base_path}}/tehtava/{{tehtava.id}}">{{tehtava.kuvaus}}>
+    </div>
+    <div class="form-group">
+        <label>Deadline</label>
+        <input type="text" class="form-control" value="{{base_path}}/tehtava/{{tehtava.id}}">{{tehtava.deadline}}>
+    </div>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Jaa muille käyttäjille
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="#">Veera</a></li>
+            <li><a href="#">Viljami</a></li>
+        </ul>
+    </div>
+    <div class="form-group">
+        <label>Jaettu seuraaville: Viljami
+        </label>
+    </div>   
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Tallenna</button>
+    </div>
+</form>
+{% endblock %}
