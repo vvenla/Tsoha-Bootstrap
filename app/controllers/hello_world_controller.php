@@ -8,8 +8,10 @@ class HelloWorldController extends BaseController {
     }
 
     public static function sandbox() {
+        $tehtavat = Tehtava::all();
+        Kint::dump($tehtavat);
         // Testaa koodiasi täällä
-        View::make('helloworld.html');
+//        View::make('helloworld.html');
     }
 
     public static function todo_add() {
