@@ -1,7 +1,7 @@
 <?php
 
 $routes->get('/', function() {
-    HelloWorldController::index();
+    TaskController::index();
 });
 
 $routes->get('/hiekkalaatikko', function() {
@@ -24,41 +24,41 @@ $routes->get('/login', function() {
     HelloWorldController::login();
 });
 
-$routes->get('/luokka', function() {
-    LuokkaController::index();
+$routes->get('/category', function() {
+    CategoryController::index();
 });
 
-$routes->get('/tehtava', function() {
-    TehtavaController::index();
+$routes->get('/task', function() {
+    TaskController::index();
 });
 
 //Tehtävän lisääminen tietokantaan
-$routes->post('/tehtava', function() {
-    TehtavaController::store();
+$routes->post('/task', function() {
+    TaskController::store();
 });
 
 //tehtävän lisäämislomakkeen näyttäminen
-$routes->get('/tehtava/new', function() {
-    TehtavaController::create();
+$routes->get('/task/new', function() {
+    TaskController::create();
 });
 
-$routes->post('/tehtava/new', function() {
-    TehtavaController::store();
+$routes->post('/task/new', function() {
+    TaskController::store();
 });
 
 //Tehtävän esittelysivu
-$routes->get('/tehtava/:id', function($id) {
-    TehtavaController::show($id);
+$routes->get('/task/:id', function($id) {
+    TaskController::show($id);
 });
 
-$routes->post('/luokka', function() {
-    TehtavaController::store();
+$routes->post('/category', function() {
+    TaskController::store();
 });
 
-$routes->get('/luokka/new', function() {
-    TehtavaController::create();
+$routes->get('/category/new', function() {
+    TaskController::create();
 });
 
-$routes->get('/luokka/:id', function($id) {
-    TehtavaController::show($id);
+$routes->get('/category/:id', function($id) {
+    TaskController::show($id);
 });

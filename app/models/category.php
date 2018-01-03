@@ -1,45 +1,45 @@
 <?php
 
-class Luokka extends BaseModel{
-    public $id, $nimi;
+class Category extends BaseModel{
+    public $id, $name;
     
     public function __construct($attributes) {
         parent::__construct($attributes);
     }
     
     public static function all(){
-        $query = DB::connection()->prepare('SELECT * FROM Luokka');
+        $query = DB::connection()->prepare('SELECT * FROM Category');
         $query->execute();
         $rows = $query->fetchAll();
         
         foreach ($rows as $row){
-            $luokat[] = new Luokka(array(
+            $categories[] = new Category(array(
                 'id' => $row['id'],
-                'nimi' => $row['nimi']
+                'name' => $row['name']
             ));
         }
-        return $luokat;
+        return $categories;
     }
     
     public static function find($id){
-        $query = DB::connection()->prepare('SELECT * FROM Luokka WHERE id = :id LIMIT 1');
+        $query = DB::connection()->prepare('SELECT * FROM Category WHERE id = :id LIMIT 1');
         $query->execute(array('id' => $id));
         $row = $query->fetch();
         
         if ($row){
-            $luokka = new Luokka(array(
+            $category = new Category(array(
                 'id' => $row['id'],
-                'nimi' => $row['nimi']
+                'name' => $row['name']
             ));
-            return $luokka;
+            return $category;
         }
         return null;
     }
     
     public function save(){
-        $query = DB::connection()->prepare('INSERT INTO Luokka (nimi) VALUES (:nimi) RETURNING id');
+        $query = DB::connection()->prepare('INSERT INTO Category (name) VALUES (:name) RETURNING id');
         $query->execute(array(
-            'nimi'=> $this->nimi
+            'name'=> $this->name
         ));
         
         $row = $query->fetch();

@@ -1,24 +1,24 @@
-CREATE TABLE Kayttaja(
+CREATE TABLE Person(
     id SERIAL PRIMARY KEY,
-    tunnus varchar(30) NOT NULL,
-    salasana varchar(50) NOT NULL
+    username varchar(30) NOT NULL,
+    password varchar(50) NOT NULL
 );
 
-CREATE TABLE Luokka(
+CREATE TABLE Category(
     id SERIAL PRIMARY KEY,
-    nimi varchar(30) NOT NULL
+    name varchar(30) NOT NULL
 );
 
-CREATE TABLE Tehtava(
+CREATE TABLE Task(
     id SERIAL PRIMARY KEY,
-    luokkaId integer REFERENCES Luokka(id),
-    nimi varchar(30) NOT NULL,
-    kuvaus varchar(90),
+    categoryid integer REFERENCES Category(id),
+    name varchar(30) NOT NULL,
+    description varchar(90),
     deadline date
 );
 
 
-CREATE TABLE KayttajaTehtava(
-    tehtavaId integer REFERENCES Tehtava(id),
-    kayttajaId integer REFERENCES Kayttaja(id)
+CREATE TABLE PersonTask(
+    taskid integer REFERENCES Task(id),
+    personid integer REFERENCES Person(id)
 );
