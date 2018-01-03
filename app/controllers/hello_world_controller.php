@@ -23,7 +23,7 @@ class HelloWorldController extends BaseController {
     }
 
     public static function todo_show() {
-        View::make('suunnitelmat\paanakyma.html');
+        View::make('suunnitelmat/paanakyma.html');
     }
 
     public static function login() {

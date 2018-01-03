@@ -14,8 +14,8 @@ class Luokka extends BaseModel{
         
         foreach ($rows as $row){
             $luokat[] = new Luokka(array(
-                'id' => $row('id'),
-                'nimi' => $row('nimi')
+                'id' => $row['id'],
+                'nimi' => $row['nimi']
             ));
         }
         return $luokat;
@@ -28,12 +28,25 @@ class Luokka extends BaseModel{
         
         if ($row){
             $luokka = new Luokka(array(
-                'id' => $row('id'),
-                'nimi' => $row('nimi')
+                'id' => $row['id'],
+                'nimi' => $row['nimi']
             ));
             return $luokka;
         }
         return null;
     }
+    
+    public function save(){
+        $query = DB::connection()->prepare('INSERT INTO Luokka (nimi) VALUES (:nimi) RETURNING id');
+        $query->execute(array(
+            'nimi'=> $this->nimi
+        ));
+        
+        $row = $query->fetch();
+        
+        $this->id = $row['id'];
+    }
+    
+    
 }
 

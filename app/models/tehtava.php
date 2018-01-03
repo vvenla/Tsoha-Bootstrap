@@ -16,7 +16,7 @@ class Tehtava extends BaseModel{
         foreach ($rows as $row){
             $tehtavat[] = new Tehtava(array(
                 'id' => $row['id'],
-                'luokkaId' => $row['luokkaId'],
+                'luokkaId' => $row['luokkaid'],
                 'nimi' => $row['nimi'],
                 'kuvaus' => $row['nimi'],
                 'deadline' => $row['deadline']
@@ -33,14 +33,27 @@ class Tehtava extends BaseModel{
         if($row){
             $tehtava = new Tehtava(array(
                 'id' => $row['id'],
-                'luokkaId' => $row['luokkaId'],
+                'luokkaId' => $row['luokkaid'],
                 'nimi' => $row['nimi'],
-                'kuvaus' => $row['nimi'],
+                'kuvaus' => $row['kuvaus'],
                 'deadline' => $row['deadline']
             ));
             return $tehtava;
         }
         return null;
+    }
+    
+    public function save(){
+        $query = DB::connection()->prepare('INSERT INTO Tehtava (luokkaid, nimi, kuvaus, deadline) VALUES (NULL, :nimi, :kuvaus, :deadline) RETURNING id');
+        $query->execute(array(
+            'nimi'=> $this->nimi,
+            'kuvaus'=> $this->kuvaus,
+            'deadline'=> $this->deadline
+        ));
+        
+        $row = $query->fetch();
+        
+        $this->id = $row['id'];
     }
 }
 
