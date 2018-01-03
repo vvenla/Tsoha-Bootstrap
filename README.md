@@ -9,9 +9,7 @@ Yleisiä linkkejä:
 * [Linkki dokumentaatiooni](doc/dokumentaatio.pdf)
 
 * [Linkki tehtävien listausnäkymään](http://vvenla.users.cs.helsinki.fi/todo/tehtava)
-* [Linkki tehtävän lisäysnäkymään]
-
-(http://vvenla.users.cs.helsinki.fi/todo/tehtava/new)
+* [Linkki tehtävän lisäysnäkymään](http://vvenla.users.cs.helsinki.fi/todo/tehtava/new)
 
 ## Työn aihe
 
