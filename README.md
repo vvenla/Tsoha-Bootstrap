@@ -12,6 +12,7 @@ Yleisiä linkkejä:
 * [Linkki tehtävän lisäysnäkymään]
 
 (http://vvenla.users.cs.helsinki.fi/todo/tehtava/new)
+
 ## Työn aihe
 
 Työn aihe on To do -sovellus, joka pohjautuu valmiiseen Muistilista-aiheeseen. Aihe tarkentuu ja muokkaantuu projektin edetessä.
