@@ -14,11 +14,10 @@ CREATE TABLE Task(
     categoryid integer REFERENCES Category(id),
     name varchar(30) NOT NULL,
     description varchar(90),
-    deadline date
+    deadline date NULL DEFAULT NULL
 );
 
-
 CREATE TABLE PersonTask(
-    taskid integer REFERENCES Task(id),
-    personid integer REFERENCES Person(id)
+    taskid integer REFERENCES Task(id) ON DELETE CASCADE,
+    personid integer REFERENCES Person(id) ON DELETE CASCADE
 );

@@ -8,16 +8,21 @@ class HelloWorldController extends BaseController {
     }
 
     public static function sandbox() {
-        $tasks = Task::all();
-        Kint::dump($tasks);
         // Testaa koodiasi täällä
+        $tehtava = new Task(array(
+            'name' => '',
+            'deadline' => 'eilen'
+        ));
+        $errors = $tehtava->errors();
+
+        Kint::dump($errors);
 //        View::make('helloworld.html');
     }
 
     public static function todo_add() {
         View::make('suunnitelmat/tehtavanLisays.html');
     }
-    
+
     public static function todo_addClass() {
         View::make('suunnitelmat/luokanLisays.html');
     }

@@ -47,6 +47,12 @@ class Category extends BaseModel{
         $this->id = $row['id'];
     }
     
+    public static function delete($id){
+        $query = DB::connection()->prepare('DELETE FROM Category WHERE id = :id');
+        //Kategorian poistaminen pitää estää, jos siellä on tehtäviä
+        $query->execute(array('id' => $id));              
+    }
+    
     
 }
 

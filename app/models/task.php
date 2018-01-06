@@ -1,19 +1,21 @@
 <?php
 
-class Task extends BaseModel{
+class Task extends BaseModel {
+
     public $id, $categoryid, $name, $description, $deadline;
-    
+
     public function __construct($attributes) {
         parent::__construct($attributes);
+        $this->validators = array('validate_name', 'validate_date');
     }
-    
-    public static function all(){
+
+    public static function all() {
         $query = DB::connection()->prepare('SELECT * FROM Task');
         $query->execute();
         $rows = $query->fetchAll();
         $tasks = array();
-        
-        foreach ($rows as $row){
+
+        foreach ($rows as $row) {
             $tasks[] = new Task(array(
                 'id' => $row['id'],
                 'categoryid' => $row['categoryid'],
@@ -24,13 +26,13 @@ class Task extends BaseModel{
         }
         return $tasks;
     }
-    
-    public static function find($id){
+
+    public static function find($id) {
         $query = DB::connection()->prepare('SELECT*FROM Task WHERE id = :id LIMIT 1');
         $query->execute(array('id' => $id));
         $row = $query->fetch();
-        
-        if($row){
+
+        if ($row) {
             $task = new Task(array(
                 'id' => $row['id'],
                 'categoryid' => $row['categoryid'],
@@ -40,22 +42,63 @@ class Task extends BaseModel{
             ));
             return $task;
         }
-        return null;
+        return NULL;
     }
-    
-    public function save(){
+
+    public function save() {
         $query = DB::connection()->prepare('INSERT INTO Task'
                 . '(categoryid, name, description, deadline)'
                 . 'VALUES (NULL, :name, :description, :deadline) RETURNING id');
+
         $query->execute(array(
-            'name'=> $this->name,
-            'description'=> $this->description,
-            'deadline'=> $this->deadline
+            'name' => $this->name,
+            'description' => $this->description,
+            'deadline' => $this->deadline
         ));
-        
+
         $row = $query->fetch();
-        
+
         $this->id = $row['id'];
     }
-}
 
+    public function delete() {
+        $query = DB::connection()->prepare('DELETE FROM Task WHERE id = :id');
+        $query->execute(array('id' => $this->id));
+    }
+    
+    public function update(){
+        $query = DB::connection()->prepare('UPDATE Task SET '
+                . 'name = :name, '
+                . 'description = :description, '
+                . 'deadline = :deadline '
+                . 'WHERE id = :id');
+
+        $query->execute(array(
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'deadline' => $this->deadline
+        ));
+
+        $row = $query->fetch();
+
+//        $this->id = $row['id'];
+    }
+
+    public function validate_date() {
+        $errors = array();
+        if (!(strtotime($this->deadline) || $this->deadline == NULL)) {
+            $errors[] = 'Deadline can be empty or a date (yyyy-mm-dd)';
+        }
+        return $errors;
+    }
+
+    public function validate_name() {
+        $errors = array();
+        if ($this->name == NULL) {
+            $errors[] = 'Name can not be empty';
+        }
+        return $errors;
+    }
+
+}
