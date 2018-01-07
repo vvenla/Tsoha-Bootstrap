@@ -3,7 +3,7 @@
 class UserController extends BaseController{
     
     public static function login(){
-        View::make('user/login.html', array('message' => 'Welcome!'));
+        View::make('user/login.html', array('message' => 'Welcome, sign in!'));
     }
     
     public static function handle_login(){
@@ -19,6 +19,11 @@ class UserController extends BaseController{
             $_SESSION['user'] = $user->id;
             Redirect::to('/task', array('message' => 'Welcome back ' . $user->username . '!'));
         }
+    }
+    
+    public static function handle_logout(){
+        $_SESSION['user'] = NULL;
+        Redirect::to('/login', array('message' => 'Goodbye!'));              
     }
     
 }

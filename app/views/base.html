@@ -7,7 +7,7 @@
 
         <title>
             {% block title %}
-            Tietokantasovellus
+            Todo
             {% endblock %}
         </title>
 
@@ -37,6 +37,7 @@
                 </div>
 
                 <div class="collapse navbar-collapse" id="navigation">
+                    {% if user_logged_in %}
                     <ul class="nav navbar-nav">
                         <!-- Navigaation linkit -->
                         <li><a href="{{base_path}}/task">Front page</a></li>
@@ -44,8 +45,15 @@
                         <li><a href="{{base_path}}/class">Create new category</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{{base_path}}/login">Sign out</a></li>
+                        <form method="post" action="{{base_path}}/logout">
+                            <button type="submit" class="btn btn-link">Sign out</button>
+                        </form>
                     </ul>
+                    {% else %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{{base_path}}/login">Sign in</a></li>
+                    </ul>
+                    {% endif %}
                 </div>
             </div>
         </nav>

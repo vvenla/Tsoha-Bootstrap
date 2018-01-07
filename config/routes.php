@@ -1,5 +1,9 @@
 <?php
 
+function check_logged_in(){
+    BaseController::check_logged_in();
+}
+
 $routes->get('/hiekkalaatikko', function() {
     HelloWorldController::sandbox();
 });
@@ -26,12 +30,17 @@ $routes->post('/login', function() {
     UserController::handle_login();
 });
 
-$routes->get('/task', function() {
+//Uloskirjautumisen käsitteleminen
+$routes->post('/logout', function() {
+    UserController::handle_logout();
+});
+
+$routes->get('/task', 'check_logged_in', function() {
     TaskController::index();
 });
 
 //Uuden tehtävän lisäämislomakkeen näyttäminen
-$routes->get('/task/new', function() {
+$routes->get('/task/new', 'check_logged_in', function() {
     TaskController::create();
 });
 
@@ -41,28 +50,28 @@ $routes->post('/task/new', function() {
 });
 
 //Tehtävän esittely- ja muokkaussivu
-$routes->get('/task/:id/edit', function($id) {
+$routes->get('/task/:id/edit', 'check_logged_in', function($id) {
     TaskController::edit($id);
 });
 
 //Tehtävän päivittäminen
-$routes->post('/task/:id/edit', function($id) {
+$routes->post('/task/:id/edit', 'check_logged_in', function($id) {
     TaskController::upd($id);
 });
 
 //Tehtävän poistaminen
-$routes->post('/task/:id/delete', function($id) {
+$routes->post('/task/:id/delete', 'check_logged_in', function($id) {
     TaskController::del($id);
 });
 
 $routes->post('/category', function() {
-    TaskController::store();
+    CategoryController::store();
 });
 
 $routes->get('/category/new', function() {
-    TaskController::create();
+    CategoryController::create();
 });
 
 $routes->get('/category/:id', function($id) {
-    TaskController::show($id);
+    CategoryController::show($id);
 });

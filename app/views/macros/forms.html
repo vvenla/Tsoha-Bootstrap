@@ -3,3 +3,9 @@
     <button type="submit" class="btn btn-primary">{{text|default('Delete')}}</button>
 </form>
 {% endmacro %}
+
+{% macro cancel_button(action, text) %}
+<form method="post" action="{{action}}">
+    <button type="submit" class="btn btn-primary">{{text|default('Cancel')}}</button>
+</form>
+{% endmacro %}

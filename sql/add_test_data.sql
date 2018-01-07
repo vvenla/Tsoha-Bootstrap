@@ -1,4 +1,4 @@
-INSERT INTO Person (username, password) VALUES ('testi', 'salasana'), ('testi2', 'salasana2');
+INSERT INTO Person (username, password) VALUES ('Testikäyttäjä1', 'salasana1'), ('Testikäyttäjä2', 'salasana2');
 
 INSERT INTO Category (name) VALUES ('Kotihommat'), ('Kouluhommat');
 
