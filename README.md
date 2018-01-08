@@ -1,15 +1,19 @@
-﻿# Tietokantasovelluksen esittelysivu
+﻿# Projektin esittelysivu
 
 
-Yleisiä linkkejä:
-
-
-* [Linkki sovellukseeni](http://vvenla.users.cs.helsinki.fi/todo/main)
+Teen tietokantasovelluksen projektityötä liittyen tietojenkäsittelytieteiden opintoihin Helsingin yliopistolla.
+Projektissa edetään viikkopalautusten mukaan. Esittelysivu päivitetään vastaamaan yleistä esittelyä, kun projekti on valmis ja arvosteltu. 
+Siihen asti Readmesta löytyyviikkopalautuksiin vaadittavia linkkejä:
 
 * [Linkki dokumentaatiooni](doc/dokumentaatio.pdf)
 
-* [Linkki tehtävien listausnäkymään](http://vvenla.users.cs.helsinki.fi/todo/tehtava)
-* [Linkki tehtävän lisäysnäkymään](http://vvenla.users.cs.helsinki.fi/todo/tehtava/new)
+* [Linkki sovelluksen kirjautumissivulle](http://vvenla.users.cs.helsinki.fi/todo/login)
+
+
+
+Sovellusta pääsee testaamaan seuraavilla tunnus-salasanapareilla:
+* Testikäyttäjä1 - salasana1
+* Testikäyttäjä2 - salasana2
 
 ## Työn aihe
 
