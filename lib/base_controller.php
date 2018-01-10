@@ -15,7 +15,7 @@ class BaseController {
     // Jos käyttäjä ei ole kirjautunut sisään, ohjataan hänet kirjautumissivulle.
     public static function check_logged_in() {
         if (!isset($_SESSION['user'])) {
-            Redirect::to('/login', array('message' => 'Log in'));
+            Redirect::to('/login', array('message' => 'Log in first!'));
         }
     }
 

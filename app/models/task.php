@@ -61,12 +61,7 @@ class Task extends BaseModel {
         $this->id = $row['id'];
     }
 
-    public function delete() {
-        $query = DB::connection()->prepare('DELETE FROM Task WHERE id = :id');
-        $query->execute(array('id' => $this->id));
-    }
-    
-    public function update(){
+    public function update() {
         $query = DB::connection()->prepare('UPDATE Task SET '
                 . 'name = :name, '
                 . 'description = :description, '
@@ -80,9 +75,14 @@ class Task extends BaseModel {
             'deadline' => $this->deadline
         ));
 
-        $row = $query->fetch();
+        $query->fetch();
 
 //        $this->id = $row['id'];
+    }
+
+    public function delete() {
+        $query = DB::connection()->prepare('DELETE FROM Task WHERE id = :id');
+        $query->execute(array('id' => $this->id));
     }
 
     public function validate_date() {
@@ -98,7 +98,19 @@ class Task extends BaseModel {
         if ($this->name == NULL) {
             $errors[] = 'Name can not be empty';
         }
+        if (strlen($this->name)>30) {
+            $errors[] = 'Too long name';
+        }
         return $errors;
+    }
+    
+    public function validate_description() {
+        $errors = array();
+        if (strlen($this->description)>90) {
+            $errors[] = 'Too long description';
+        }
+        return $errors;
+        
     }
 
 }
