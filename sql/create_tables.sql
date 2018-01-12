@@ -15,7 +15,7 @@ CREATE TABLE Task(
     categoryid integer REFERENCES Category(id),
     name varchar(30) NOT NULL,
     description varchar(90),
-    deadline date NULL DEFAULT NULL
+    deadline date
 );
 
 CREATE TABLE PersonTask(

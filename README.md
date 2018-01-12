@@ -15,6 +15,8 @@ Sovellusta pääsee testaamaan seuraavilla tunnus-salasanapareilla:
 * Testikäyttäjä1 - salasana1
 * Testikäyttäjä2 - salasana2
 
+Tällä hetkellä etusivulla ('To do -list' yläpalkista) näkyy kategorioiden listaus, ja etusivulla tehtävien listaus.
+
 ## Työn aihe
 
 Työn aihe on To do -sovellus, joka pohjautuu valmiiseen Muistilista-aiheeseen. Aihe tarkentuu ja muokkaantuu projektin edetessä.

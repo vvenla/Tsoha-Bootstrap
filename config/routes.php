@@ -8,8 +8,12 @@ $routes->get('/hiekkalaatikko', function() {
     HelloWorldController::sandbox();
 });
 
-$routes->get('/main', function() {
-    HelloWorldController::todo_show();
+$routes->get('/', 'check_logged_in', function() {
+    CategoryController::index();
+});
+
+$routes->get('/main', 'check_logged_in', function() {
+    CategoryController::index();
 });
 
 $routes->get('/class', function() {
