@@ -6,6 +6,7 @@ CREATE TABLE Person(
 
 CREATE TABLE Category(
     id SERIAL PRIMARY KEY,
+    personid integer REFERENCES Person(id),
     name varchar(30) NOT NULL
 );
 

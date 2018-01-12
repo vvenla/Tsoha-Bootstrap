@@ -6,7 +6,6 @@ class User extends BaseModel {
 
     public function __construct($attributes) {
         parent::__construct($attributes);
-        $this->validators = array('validate_username');
     }
 
     public static function find($id) {
@@ -33,8 +32,8 @@ class User extends BaseModel {
             'username' => $username,
             'password' => $password));
         $row = $query->fetch();
-        
-        if($row) {
+
+        if ($row) {
             $user = new User(array(
                 'id' => $row['id'],
                 'username' => $username,

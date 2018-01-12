@@ -2,7 +2,7 @@
 
 class Category extends BaseModel {
 
-    public $id, $name;
+    public $id, $personid, $name;
 
     public function __construct($attributes) {
         parent::__construct($attributes);
@@ -18,6 +18,7 @@ class Category extends BaseModel {
         foreach ($rows as $row) {
             $categories[] = new Category(array(
                 'id' => $row['id'],
+                'personid' => $row['personid'],
                 'name' => $row['name']
             ));
         }
@@ -32,6 +33,7 @@ class Category extends BaseModel {
         if ($row) {
             $category = new Category(array(
                 'id' => $row['id'],
+                'personid' => $row['personid'],
                 'name' => $row['name']
             ));
             return $category;
@@ -40,9 +42,11 @@ class Category extends BaseModel {
     }
 
     public function save() {
-        $query = DB::connection()->prepare('INSERT INTO Category (name) VALUES (:name) RETURNING id');
+        $query = DB::connection()->prepare('INSERT INTO Category (personid, name) '
+                . 'VALUES (:personid, :name) RETURNING id');
         $query->execute(array(
-            'name' => $this->name
+            'name' => $this->name,
+            'personid' => $this->personid
         ));
 
         $row = $query->fetch();
@@ -52,7 +56,7 @@ class Category extends BaseModel {
     
     public function update() {
         $query = DB::connection()->prepare('UPDATE Category SET '
-                . 'name = :name'
+                . 'name = :name '
                 . 'WHERE id = :id');
         
         $query->execute(array(
@@ -63,21 +67,38 @@ class Category extends BaseModel {
         $query->fetch();
     }
 
-    public static function delete($id) {
+    public function delete() {
         $query = DB::connection()->prepare('DELETE FROM Category WHERE id = :id');
         //Kategorian poistamisen voisi estää, jos siellä on tehtäviä
-        $query->execute(array('id' => $id));
+        $query->execute(array('id' => $this->id));
     }
 
     public function validate_name() {
         $errors = array();
         if ($this->name == NULL) {
             $errors[] = 'Name can not be empty';
-        }
-        if (strlen($this->name)>30) {
+        }else if (strlen($this->name)>30) {
             $errors[] = 'Too long name';
         }
         return $errors;
     }
 
+    public function is_owned_by($user_id) {
+        $query = DB::connection()->prepare('SELECT * FROM Person, Category '
+                . 'WHERE category.id = :id '
+                . 'AND category.personid = :personid LIMIT 1');
+        
+        $query->execute(array('id' => $this->id, 'personid' => $user_id));
+        $row = $query->fetch();
+        
+        if ($row) {
+            return TRUE;
+        }       
+        return FALSE;
+    }
+    
+    public function is_empty() {
+        return TRUE;
+    }
+    
 }

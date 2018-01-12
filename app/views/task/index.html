@@ -10,8 +10,7 @@
 
     {%for task in tasks%}
     <tr>
-        <td><a href="{{base_path}}/task/{{task.id}}/edit">{{task.name}}
-        </td>
+        <td><a href="{{base_path}}/task/{{task.id}}/edit">{{task.name}}</td>
         <td>
             {{forms.delete_button("#{base_path}/task/#{task.id}/delete", "Done!")}}
         </td>

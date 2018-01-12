@@ -6,7 +6,7 @@ class Task extends BaseModel {
 
     public function __construct($attributes) {
         parent::__construct($attributes);
-        $this->validators = array('validate_name', 'validate_date');
+        $this->validators = array('validate_name', 'validate_date', 'validate_description');
     }
 
     public static function all() {
@@ -97,8 +97,7 @@ class Task extends BaseModel {
         $errors = array();
         if ($this->name == NULL) {
             $errors[] = 'Name can not be empty';
-        }
-        if (strlen($this->name)>30) {
+        } else if (strlen($this->name)>30) {
             $errors[] = 'Too long name';
         }
         return $errors;
