@@ -59,6 +59,11 @@
         </nav>
 
         <div id="main-container">
+            {% if error %}
+            <div class="alert alert-danger">
+                <ul>{{error}}</ul>
+            </div>
+            {% endif %}
             {% if errors %}
             <div class="alert alert-danger">
                 <ul>

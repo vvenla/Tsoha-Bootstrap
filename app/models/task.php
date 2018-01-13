@@ -9,6 +9,7 @@ class Task extends BaseModel {
         $this->validators = array('validate_name', 'validate_date', 'validate_description');
     }
 
+    // Palauttaa kaikki tehtävät
     public static function all() {
         $query = DB::connection()->prepare('SELECT * FROM Task');
         $query->execute();
@@ -27,6 +28,7 @@ class Task extends BaseModel {
         return $tasks;
     }
 
+    // Palauttaa tietyn tehtävän
     public static function find($id) {
         $query = DB::connection()->prepare('SELECT*FROM Task WHERE id = :id LIMIT 1');
         $query->execute(array('id' => $id));
@@ -45,6 +47,7 @@ class Task extends BaseModel {
         return NULL;
     }
 
+    // Lisää uuden tehtävän tietokantaan
     public function save() {
         $query = DB::connection()->prepare('INSERT INTO Task'
                 . '(categoryid, name, description, deadline)'
@@ -61,6 +64,7 @@ class Task extends BaseModel {
         $this->id = $row['id'];
     }
 
+    // Muokkaa tehtävän tietoja tietokannassa
     public function update() {
         $query = DB::connection()->prepare('UPDATE Task SET '
                 . 'name = :name, '
@@ -80,11 +84,13 @@ class Task extends BaseModel {
 //        $this->id = $row['id'];
     }
 
+    // Poistaa tehtävän tietokannasta
     public function delete() {
         $query = DB::connection()->prepare('DELETE FROM Task WHERE id = :id');
         $query->execute(array('id' => $this->id));
     }
 
+    // Tarkistaa, että deadline on päivämäärämuotoinen
     public function validate_date() {
         $errors = array();
         if (!(strtotime($this->deadline) || $this->deadline == NULL)) {
@@ -93,6 +99,7 @@ class Task extends BaseModel {
         return $errors;
     }
 
+    // Tarkistaa, että nimi ei ole tyhjä eikä liian pitkä
     public function validate_name() {
         $errors = array();
         if ($this->name == NULL) {
@@ -102,7 +109,8 @@ class Task extends BaseModel {
         }
         return $errors;
     }
-    
+   
+    // Tarkistaa, että kuvaus ei ole liian pitkä
     public function validate_description() {
         $errors = array();
         if (strlen($this->description)>90) {
