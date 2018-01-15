@@ -26,9 +26,9 @@ class Category extends BaseModel {
 //        return $categories;
 //    }
 
-    // Palauttaa kaikki käyttäjään liitetyt kategorioiat
+    // Palauttaa kaikki käyttäjään liitetyt kategoriat
     public static function all($user_id) {
-        $query = DB::connection()->prepare('SELECT * FROM Category, User '
+        $query = DB::connection()->prepare('SELECT DISTINCT * FROM Category, Person '
                 . 'WHERE category.personid = :id');
         $query->execute(array('id' => $user_id));
         $rows = $query->fetchAll();
@@ -85,8 +85,6 @@ class Category extends BaseModel {
             'id' => $this->id,
             'name' => $this->name
         ));
-
-        $query->fetch();
     }
 
     // Poistaa kategorian tietokannasta

@@ -28,6 +28,27 @@ class Task extends BaseModel {
         return $tasks;
     }
 
+    // Palauttaa kaikki tietyn käyttäjän tehtävät
+    public static function all_users_tasks($user_id) {
+        $query = DB::connection()->prepare('SELECT * FROM Task, Person, PersonTask '
+                . 'WHERE persontask.personid = :user_id '
+                . 'AND persontask.taskid = :task_id');
+        $query->execute(array('user_id' => $user_id));
+        $rows = $query->fetchAll();
+        $tasks = array();
+
+        foreach ($rows as $row) {
+            $tasks[] = new Task(array(
+                'id' => $row['id'],
+                'categoryid' => $row['categoryid'],
+                'name' => $row['name'],
+                'description' => $row['description'],
+                'deadline' => $row['deadline']
+            ));
+        }
+        return $tasks;
+    }
+
     // Palauttaa tietyn tehtävän
     public static function find($id) {
         $query = DB::connection()->prepare('SELECT*FROM Task WHERE id = :id LIMIT 1');
@@ -78,10 +99,12 @@ class Task extends BaseModel {
             'description' => $this->description,
             'deadline' => $this->deadline
         ));
+    }
 
-        $query->fetch();
-
-//        $this->id = $row['id'];
+    // Lisää tehtävän tiettyyn kategoriaan
+    public function set_category($category_id) {
+        $query = DB::connection()->prepare('UPDATE Task SET categoryid = :category_id');
+        return $query->execute(array('category_id' => $category_id));
     }
 
     // Poistaa tehtävän tietokannasta
@@ -104,20 +127,19 @@ class Task extends BaseModel {
         $errors = array();
         if ($this->name == NULL) {
             $errors[] = 'Name can not be empty';
-        } else if (strlen($this->name)>30) {
+        } else if (strlen($this->name) > 30) {
             $errors[] = 'Too long name';
         }
         return $errors;
     }
-   
+
     // Tarkistaa, että kuvaus ei ole liian pitkä
     public function validate_description() {
         $errors = array();
-        if (strlen($this->description)>90) {
+        if (strlen($this->description) > 90) {
             $errors[] = 'Too long description';
         }
         return $errors;
-        
     }
 
 }

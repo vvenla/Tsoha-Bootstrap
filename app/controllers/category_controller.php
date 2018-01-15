@@ -80,7 +80,7 @@ class CategoryController extends BaseController {
         }
     }
 
-    public static function del($id) {
+    public static function delete($id) {
         $user_logged_in = self::get_user_logged_in();
         $category = new Category(array('id' => $id));
 

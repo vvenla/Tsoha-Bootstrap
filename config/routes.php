@@ -60,12 +60,17 @@ $routes->get('/task/:id/edit', 'check_logged_in', function($id) {
 
 //Tehtävän päivittäminen
 $routes->post('/task/:id/edit', 'check_logged_in', function($id) {
-    TaskController::upd($id);
+    TaskController::update($id);
+});
+
+//Tehtävän siirtäminen kategoriaan
+$routes->post('/task/:category_id/move', 'check_logged_in', function($category_id) {
+    TaskController::move($category_id);
 });
 
 //Tehtävän poistaminen
 $routes->post('/task/:id/delete', 'check_logged_in', function($id) {
-    TaskController::del($id);
+    TaskController::delete($id);
 });
 
 $routes->get('/category/new', 'check_logged_in', function() {
@@ -86,7 +91,7 @@ $routes->get('/category', 'check_logged_in', function() {
 
 //Kategorian poistaminen
 $routes->post('/category/:id/delete', 'check_logged_in', function($id) {
-    CategoryController::del($id);
+    CategoryController::delete($id);
 });
 
 //Kategorian muokkaussivu

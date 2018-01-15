@@ -52,7 +52,8 @@ class TaskController extends BaseController {
         View::make('task/show.html', array('attributes' => $task));
     }
 
-    public static function upd($id) {
+    public static function update($id) {
+        
         $params = $_POST;
         $attributes = array(
             'id' => $id,
@@ -76,8 +77,30 @@ class TaskController extends BaseController {
             View::make('/task/show.html', array('errors' => $errors, 'attributes' => $attributes));
         }
     }
+    
+    public static function move($category_id) {
+        $user_logged_in = self::get_user_logged_in();
+        $params = $_POST;
+        
+        $attributes = array(
+            'id' => $params['id'],
+            'categoryid' => $category_id,
+            'name' => trim($params['name']),
+            'description' => trim($params['description']),
+            'deadline' => $params['deadline']
+        );
+        
+        $categories = Category::all(1);
+//        $categories = Category::all();
+        $task = new Task($attributes);
+        
+//        Kint::dump($categories);
+        
+        $task->set_category($category_id);        
+        Redirect::to('/task', array('message' => 'Task moved to category', 'categories' => $categories));
+    }
 
-    public static function del($id) {
+    public static function delete($id) {
         $task = new Task(array('id' => $id));
         $task->delete();
 
