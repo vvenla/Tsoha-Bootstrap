@@ -4,19 +4,22 @@ class TaskController extends BaseController {
 
     public static function index() {
         $user_logged_in = self::get_user_logged_in();
-        $tasks = Task::all(array('user_id' => $user_logged_in->id));
-        
-        View::make('task/index.html', array('tasks' => $tasks));
+        $tasks = Task::all_users_tasks($user_logged_in->id);
+
+        $categories = Category::all($user_logged_in->id);
+
+        View::make('task/index.html', array('tasks' => $tasks, 'categories' => $categories));
     }
 
     public static function create() {
-        $tasks = Task::all();
+        $user_logged_in = self::get_user_logged_in();
+        $tasks = Task::all_users_tasks($user_logged_in->id);
         View::make('task/new.html', array('tasks' => $tasks));
     }
 
     public static function store() {
         $user_logged_in = self::get_user_logged_in();
-        
+
         $params = $_POST;
         $attributes = array(
             'name' => trim($params['name']),
@@ -53,7 +56,7 @@ class TaskController extends BaseController {
     }
 
     public static function update($id) {
-        
+
         $params = $_POST;
         $attributes = array(
             'id' => $id,
@@ -77,34 +80,24 @@ class TaskController extends BaseController {
             View::make('/task/show.html', array('errors' => $errors, 'attributes' => $attributes));
         }
     }
-    
-    public static function move($category_id) {
-        $user_logged_in = self::get_user_logged_in();
+
+    public static function move($task_id) {
+//        $user_logged_in = self::get_user_logged_in();
         $params = $_POST;
-        
-        $attributes = array(
-            'id' => $params['id'],
-            'categoryid' => $category_id,
-            'name' => trim($params['name']),
-            'description' => trim($params['description']),
-            'deadline' => $params['deadline']
-        );
-        
-        $categories = Category::all(1);
-//        $categories = Category::all();
-        $task = new Task($attributes);
-        
-//        Kint::dump($categories);
-        
-        $task->set_category($category_id);        
-        Redirect::to('/task', array('message' => 'Task moved to category', 'categories' => $categories));
+
+        $task = Task::find($task_id);
+
+//        $categories = Category::all($user_logged_in->id);
+
+        $task->set_category($params['categoryid']);
+        Redirect::to('/task', array('message' => 'Task moved to category'));
     }
 
     public static function delete($id) {
         $task = new Task(array('id' => $id));
         $task->delete();
 
-        Redirect::to('/task', array('message' => 'Task deleted!'));
+        Redirect::to('/task', array('message' => 'Task completed!'));
     }
 
 }

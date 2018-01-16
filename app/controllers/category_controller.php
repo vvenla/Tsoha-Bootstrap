@@ -5,8 +5,9 @@ class CategoryController extends BaseController {
     public static function index() {
         $user_logged_in = self::get_user_logged_in();
         $categories = Category::all($user_logged_in->id);
+        $tasks = Task::all_users_tasks($user_logged_in->id);
 
-        View::make('category/index.html', array('categories' => $categories));
+        View::make('category/index.html', array('categories' => $categories, 'tasks' => $tasks));
     }
 
     public static function show($id) {

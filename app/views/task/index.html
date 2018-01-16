@@ -10,17 +10,23 @@
 
     {% for task in tasks %}
     <tr>
-        <td><a href="{{base_path}}/task/{{task.id}}/edit">{{task.name}}</td>
         <td>
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Set category
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu">
+            <a href="{{base_path}}/task/{{task.id}}/edit">{{task.name}}
+        </td>
+        
+        <td>
+            <form method="post" action="{{base_path}}/task/{{task.id}}/move">
+                <select name="categoryid" class="form-control">
+                    <option>Change category</option>
                     {% for category in categories %}
-                    <li><a href="{{base_path}}/task/{{category.id}}/move">{{category.name}}</a></li>
+                    <option value="{{category.id}}">{{category.name}}</option>                   
                     {% endfor %}
-                </ul>
-            </div>
+                </select>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Move</button>
+                </div>
+            </form>
+
         </td>
         <td>
             {{forms.delete_button("#{base_path}/task/#{task.id}/delete", "Done!")}}

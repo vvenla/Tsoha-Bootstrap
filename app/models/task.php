@@ -10,29 +10,28 @@ class Task extends BaseModel {
     }
 
     // Palauttaa kaikki tehtävät
-    public static function all() {
-        $query = DB::connection()->prepare('SELECT * FROM Task');
-        $query->execute();
-        $rows = $query->fetchAll();
-        $tasks = array();
-
-        foreach ($rows as $row) {
-            $tasks[] = new Task(array(
-                'id' => $row['id'],
-                'categoryid' => $row['categoryid'],
-                'name' => $row['name'],
-                'description' => $row['description'],
-                'deadline' => $row['deadline']
-            ));
-        }
-        return $tasks;
-    }
+//    public static function all() {
+//        $query = DB::connection()->prepare('SELECT * FROM Task');
+//        $query->execute();
+//        $rows = $query->fetchAll();
+//        $tasks = array();
+//
+//        foreach ($rows as $row) {
+//            $tasks[] = new Task(array(
+//                'id' => $row['id'],
+//                'categoryid' => $row['categoryid'],
+//                'name' => $row['name'],
+//                'description' => $row['description'],
+//                'deadline' => $row['deadline']
+//            ));
+//        }
+//        return $tasks;
+//    }
 
     // Palauttaa kaikki tietyn käyttäjän tehtävät
     public static function all_users_tasks($user_id) {
-        $query = DB::connection()->prepare('SELECT * FROM Task, Person, PersonTask '
-                . 'WHERE persontask.personid = :user_id '
-                . 'AND persontask.taskid = :task_id');
+        $query = DB::connection()->prepare('SELECT * FROM Task, PersonTask '
+                . 'WHERE persontask.personid = :user_id');
         $query->execute(array('user_id' => $user_id));
         $rows = $query->fetchAll();
         $tasks = array();

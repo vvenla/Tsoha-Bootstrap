@@ -64,7 +64,7 @@ $routes->post('/task/:id/edit', 'check_logged_in', function($id) {
 });
 
 //Tehtävän siirtäminen kategoriaan
-$routes->post('/task/:category_id/move', 'check_logged_in', function($category_id) {
+$routes->post('/task/:id/move', 'check_logged_in', function($category_id) {
     TaskController::move($category_id);
 });
 
