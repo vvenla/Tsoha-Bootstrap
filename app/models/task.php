@@ -47,6 +47,27 @@ class Task extends BaseModel {
         }
         return $tasks;
     }
+    
+    public static function all_tasks_in_category($user_id, $category_id) {
+        
+        $query = DB::connection()->prepare('SELECT * FROM Task, PersonTask, Category '
+                . 'WHERE persontask.personid = :user_id '
+                . 'AND task.categoryid = :category_id');
+        $query->execute(array('user_id' => $user_id, 'category_id' => $category_id));
+        $rows = $query->fetchAll();
+        $tasks = array();
+
+        foreach ($rows as $row) {
+            $tasks[] = new Task(array(
+                'id' => $row['id'],
+                'categoryid' => $row['categoryid'],
+                'name' => $row['name'],
+                'description' => $row['description'],
+                'deadline' => $row['deadline']
+            ));
+        }
+        return $tasks;
+    }
 
     // Palauttaa tietyn tehtävän
     public static function find($id) {
@@ -68,8 +89,8 @@ class Task extends BaseModel {
     }
 
     // Lisää uuden tehtävän tietokantaan
-    public function save() {
-        $query = DB::connection()->prepare('INSERT INTO Task'
+    public function save($user_id) {
+        $query = DB::connection()->prepare('INSERT INTO Task '
                 . '(categoryid, name, description, deadline)'
                 . 'VALUES (NULL, :name, :description, :deadline) RETURNING id');
 
@@ -78,10 +99,19 @@ class Task extends BaseModel {
             'description' => $this->description,
             'deadline' => $this->deadline
         ));
-
+        
         $row = $query->fetch();
 
         $this->id = $row['id'];
+        
+        $query2 = DB::connection()->prepare('INSERT INTO PersonTask '
+                . '(taskid, personid) '
+                . 'VALUES (:taskid, :personid)');
+        
+        $query2->execute(array(
+            'taskid' => $this->id,
+            'personid' => $user_id
+        ));
     }
 
     // Muokkaa tehtävän tietoja tietokannassa
@@ -102,8 +132,9 @@ class Task extends BaseModel {
 
     // Lisää tehtävän tiettyyn kategoriaan
     public function set_category($category_id) {
-        $query = DB::connection()->prepare('UPDATE Task SET categoryid = :category_id');
-        return $query->execute(array('category_id' => $category_id));
+        $query = DB::connection()->prepare('UPDATE Task SET categoryid = :category_id '
+                . 'WHERE id = :id');
+        return $query->execute(array('category_id' => $category_id, 'id' => $this->id));
     }
 
     // Poistaa tehtävän tietokannasta

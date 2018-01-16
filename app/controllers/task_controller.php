@@ -4,8 +4,9 @@ class TaskController extends BaseController {
 
     public static function index() {
         $user_logged_in = self::get_user_logged_in();
-        $tasks = Task::all_users_tasks($user_logged_in->id);
 
+        
+        $tasks = Task::all_users_tasks($user_logged_in->id);
         $categories = Category::all($user_logged_in->id);
 
         View::make('task/index.html', array('tasks' => $tasks, 'categories' => $categories));
@@ -34,7 +35,7 @@ class TaskController extends BaseController {
 
         $errors = $task->errors();
         if (count($errors) == 0) {
-            $task->save();
+            $task->save($user_logged_in->id);
 
             Redirect::to('/task', array('message' => 'Task added!'));
         } else {
