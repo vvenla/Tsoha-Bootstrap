@@ -90,7 +90,7 @@ class Category extends BaseModel {
     // Poistaa kategorian tietokannasta
     public function delete() {
         $query = DB::connection()->prepare('DELETE FROM Category WHERE id = :id');
-        //Kategorian poistamisen voisi estää, jos siellä on tehtäviä
+        
         $query->execute(array('id' => $this->id));
     }
 
@@ -100,14 +100,16 @@ class Category extends BaseModel {
         if ($this->name == NULL) {
             $errors[] = 'Name can not be empty';
         } else if (strlen($this->name) > 30) {
-            $errors[] = 'Too long name';
+            $errors[] = 'Name can not exceed 30 characters';
         }
         return $errors;
     }
+    
+
 
     // Tarkistaa, onko kategoria liitetty tiettyyn käyttäjään
     public function is_owned_by($user_id) {
-        $query = DB::connection()->prepare('SELECT * FROM Person, Category '
+        $query = DB::connection()->prepare('SELECT * FROM Category '
                 . 'WHERE category.id = :id '
                 . 'AND category.personid = :personid LIMIT 1');
 
@@ -122,8 +124,8 @@ class Category extends BaseModel {
 
     // Tarkistaa, onko kategoria tyhjä tehtävistä.
     public function is_empty() {
-        $query = DB::connection()->prepare('SELECT * FROM Category, Task '
-                . 'WHERE task.categoryid = :id');
+        $query = DB::connection()->prepare('SELECT * FROM PersonTaskCategory '
+                . 'WHERE persontaskcategory.categoryid = :id');
 
         $query->execute(array('id' => $this->id));
         $row = $query->fetch();

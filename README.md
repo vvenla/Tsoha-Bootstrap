@@ -3,7 +3,7 @@
 
 Teen tietokantasovelluksen projektityötä liittyen tietojenkäsittelytieteiden opintoihin Helsingin yliopistolla.
 Projektissa edetään viikkopalautusten mukaan. Esittelysivu päivitetään vastaamaan yleistä esittelyä, kun projekti on valmis ja arvosteltu. 
-Siihen asti Readmesta löytyyviikkopalautuksiin vaadittavia linkkejä:
+Siihen asti Readmesta löytyy viikkopalautuksiin vaadittavia linkkejä:
 
 * [Linkki dokumentaatiooni](doc/dokumentaatio.pdf)
 
@@ -15,7 +15,6 @@ Sovellusta pääsee testaamaan seuraavilla tunnus-salasanapareilla:
 * Testikäyttäjä1 - salasana1
 * Testikäyttäjä2 - salasana2
 
-Tällä hetkellä etusivulla ('To do -list' yläpalkista) näkyy kategorioiden listaus, ja etusivulla tehtävien listaus.
 
 ## Työn aihe
 

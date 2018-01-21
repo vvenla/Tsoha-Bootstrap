@@ -2,7 +2,7 @@
 
 class Task extends BaseModel {
 
-    public $id, $categoryid, $name, $description, $deadline;
+    public $id, $name, $description, $deadline;
 
     public function __construct($attributes) {
         parent::__construct($attributes);
@@ -27,11 +27,10 @@ class Task extends BaseModel {
 //        }
 //        return $tasks;
 //    }
-
     // Palauttaa kaikki tietyn käyttäjän tehtävät
     public static function all_users_tasks($user_id) {
-        $query = DB::connection()->prepare('SELECT * FROM Task, PersonTask '
-                . 'WHERE persontask.personid = :user_id');
+        $query = DB::connection()->prepare('SELECT DISTINCT Task.* FROM Task, PersonTaskCategory '
+                . 'WHERE persontaskcategory.personid = :user_id');
         $query->execute(array('user_id' => $user_id));
         $rows = $query->fetchAll();
         $tasks = array();
@@ -39,7 +38,6 @@ class Task extends BaseModel {
         foreach ($rows as $row) {
             $tasks[] = new Task(array(
                 'id' => $row['id'],
-                'categoryid' => $row['categoryid'],
                 'name' => $row['name'],
                 'description' => $row['description'],
                 'deadline' => $row['deadline']
@@ -47,12 +45,13 @@ class Task extends BaseModel {
         }
         return $tasks;
     }
-    
+
     public static function all_tasks_in_category($user_id, $category_id) {
-        
-        $query = DB::connection()->prepare('SELECT * FROM Task, PersonTask, Category '
-                . 'WHERE persontask.personid = :user_id '
-                . 'AND task.categoryid = :category_id');
+
+        $query = DB::connection()->prepare('SELECT DISTINCT Task.* FROM Task, PersonTaskCategory '
+                . 'WHERE persontaskcategory.personid = :user_id '
+                . 'AND persontaskcategory.categoryid = :category_id '
+                . 'AND persontaskcategory.taskid = task.id');
         $query->execute(array('user_id' => $user_id, 'category_id' => $category_id));
         $rows = $query->fetchAll();
         $tasks = array();
@@ -60,7 +59,27 @@ class Task extends BaseModel {
         foreach ($rows as $row) {
             $tasks[] = new Task(array(
                 'id' => $row['id'],
-                'categoryid' => $row['categoryid'],
+                'name' => $row['name'],
+                'description' => $row['description'],
+                'deadline' => $row['deadline']
+            ));
+        }
+        return $tasks;
+    }
+
+    public static function all_tasks_without_category($user_id) {
+        $query = DB::connection()->prepare('SELECT DISTINCT Task.* FROM Task, PersonTaskCategory '
+                . 'WHERE persontaskcategory.personid = :user_id '
+                . 'AND persontaskcategory.categoryid IS NULL '
+                . 'AND persontaskcategory.taskid = task.id');
+
+        $query->execute(array('user_id' => $user_id));
+        $rows = $query->fetchAll();
+        $tasks = array();
+
+        foreach ($rows as $row) {
+            $tasks[] = new Task(array(
+                'id' => $row['id'],
                 'name' => $row['name'],
                 'description' => $row['description'],
                 'deadline' => $row['deadline']
@@ -78,7 +97,6 @@ class Task extends BaseModel {
         if ($row) {
             $task = new Task(array(
                 'id' => $row['id'],
-                'categoryid' => $row['categoryid'],
                 'name' => $row['name'],
                 'description' => $row['description'],
                 'deadline' => $row['deadline']
@@ -91,23 +109,23 @@ class Task extends BaseModel {
     // Lisää uuden tehtävän tietokantaan
     public function save($user_id) {
         $query = DB::connection()->prepare('INSERT INTO Task '
-                . '(categoryid, name, description, deadline)'
-                . 'VALUES (NULL, :name, :description, :deadline) RETURNING id');
+                . '(name, description, deadline) '
+                . 'VALUES (:name, :description, :deadline) RETURNING id');
 
         $query->execute(array(
             'name' => $this->name,
             'description' => $this->description,
             'deadline' => $this->deadline
         ));
-        
+
         $row = $query->fetch();
 
         $this->id = $row['id'];
-        
-        $query2 = DB::connection()->prepare('INSERT INTO PersonTask '
+
+        $query2 = DB::connection()->prepare('INSERT INTO PersonTaskCategory '
                 . '(taskid, personid) '
                 . 'VALUES (:taskid, :personid)');
-        
+
         $query2->execute(array(
             'taskid' => $this->id,
             'personid' => $user_id
@@ -130,11 +148,26 @@ class Task extends BaseModel {
         ));
     }
 
-    // Lisää tehtävän tiettyyn kategoriaan
-    public function set_category($category_id) {
-        $query = DB::connection()->prepare('UPDATE Task SET categoryid = :category_id '
-                . 'WHERE id = :id');
-        return $query->execute(array('category_id' => $category_id, 'id' => $this->id));
+    // Lisää käyttäjään liitetyn tehtävän tiettyyn kategoriaan
+    public function set_category($category_id, $user_id) {
+        $query = DB::connection()->prepare('UPDATE PersonTaskCategory SET categoryid = :category_id '
+                . 'WHERE taskid = :task_id '
+                . 'AND personid = :user_id');
+        
+        return $query->execute(array(
+                    'category_id' => $category_id,
+                    'task_id' => $this->id,
+                    'user_id' => $user_id
+        ));
+    }
+  
+
+    // Jakaa tehtävän toiselle käyttäjälle
+    public function share_with($id) {
+        $query = DB::connection()->prepare('INSERT INTO PersonTaskCategory '
+                . '(personid, taskid) '
+                . 'VALUES (:person_id, :task_id)');
+        return $query->execute(array('task_id' => $this->id, 'person_id' => $id));
     }
 
     // Poistaa tehtävän tietokannasta
@@ -147,7 +180,7 @@ class Task extends BaseModel {
     public function validate_date() {
         $errors = array();
         if (!(strtotime($this->deadline) || $this->deadline == NULL)) {
-            $errors[] = 'Deadline can be empty or a date (yyyy-mm-dd)';
+            $errors[] = 'Deadline must be date (yyyy-mm-dd) or empty';
         }
         return $errors;
     }
@@ -158,7 +191,7 @@ class Task extends BaseModel {
         if ($this->name == NULL) {
             $errors[] = 'Name can not be empty';
         } else if (strlen($this->name) > 30) {
-            $errors[] = 'Too long name';
+            $errors[] = 'Name can not exceed 30 characters';
         }
         return $errors;
     }
@@ -167,7 +200,7 @@ class Task extends BaseModel {
     public function validate_description() {
         $errors = array();
         if (strlen($this->description) > 90) {
-            $errors[] = 'Too long description';
+            $errors[] = 'Description can not exceed 90 characters';
         }
         return $errors;
     }

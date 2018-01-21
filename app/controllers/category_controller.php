@@ -4,17 +4,24 @@ class CategoryController extends BaseController {
 
     public static function index() {
         $user_logged_in = self::get_user_logged_in();
-        $categories = Category::all($user_logged_in->id);
-        
-        $tasks = array();
-        
-        foreach ($categories as $category) {
-            $tasks[] = Task::all_tasks_in_category($user_logged_in->id, $category->id);
-        }
-        
-        
 
-        View::make('category/index.html', array('categories' => $categories, 'tasks' => $tasks));
+        $tasks_without_category = Task::all_tasks_without_category($user_logged_in->id);
+
+
+        $categories = Category::all($user_logged_in->id);
+
+        $tasks = array();
+
+        foreach ($categories as $category) {
+
+            $category->tasks = Task::all_tasks_in_category($user_logged_in->id, $category->id);
+            
+        }
+
+        View::make('category/index.html', array(
+            'tasks_without_category' => $tasks_without_category,
+            'categories' => $categories,
+            'tasks' => $tasks));
     }
 
     public static function show($id) {
@@ -24,7 +31,7 @@ class CategoryController extends BaseController {
         if ($category->is_owned_by($user_logged_in->id)) {
             View::make('category/edit.html', array('category' => $category));
         } else {
-            Redirect::to('/category', array('error' => 'Category not found'));
+            Redirect::to('/main', array('error' => 'Category not found'));
         }
     }
 
@@ -47,7 +54,7 @@ class CategoryController extends BaseController {
 
         if (count($errors) == 0) {
             $category->save();
-            Redirect::to('/category', array('message' => 'Category added'));
+            Redirect::to('/main', array('message' => 'Category added'));
         } else {
             View::make('/category/new.html', array('errors' => $errors, 'attributes' => $attributes));
         }
@@ -60,7 +67,7 @@ class CategoryController extends BaseController {
         if ($category->is_owned_by($user_logged_in->id)) {
             View::make('category/edit.html', array('attributes' => $category));
         } else {
-            Redirect::to('/category', array('error' => 'Category not found'));
+            Redirect::to('/main', array('error' => 'Category not found'));
         }
     }
 
@@ -78,11 +85,11 @@ class CategoryController extends BaseController {
         $errors = $category->errors();
 
         if (!$category->is_owned_by($user_logged_in->id)) {
-            Redirect::to('/category', array('error' => 'Category not found'));
+            Redirect::to('/main', array('error' => 'Category not found'));
         }
         if (count($errors) == 0) {
             $category->update();
-            Redirect::to('/category', array('message' => 'Category edited'));
+            Redirect::to('/main', array('message' => 'Category edited'));
         } else {
             View::make('category/edit.html', array('errors' => $errors, 'attributes' => $attributes));
         }
@@ -93,12 +100,12 @@ class CategoryController extends BaseController {
         $category = new Category(array('id' => $id));
 
         if (!$category->is_owned_by($user_logged_in->id)) {
-            Redirect::to('/category', array('error' => 'Category not found'));
+            Redirect::to('/main', array('error' => 'Category not found'));
         } else if (!$category->is_empty()) {
-            Redirect::to('/category', array('error' => 'Category can not be deleted if it is not empty'));
+            Redirect::to('/main', array('error' => 'Category can not be deleted if it is not empty'));
         } else {
             $category->delete();
-            Redirect::to('/category', array('message' => 'Category deleted'));
+            Redirect::to('/main', array('message' => 'Category deleted'));
         }
     }
 

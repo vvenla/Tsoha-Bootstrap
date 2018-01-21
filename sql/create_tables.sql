@@ -12,13 +12,13 @@ CREATE TABLE Category(
 
 CREATE TABLE Task(
     id SERIAL PRIMARY KEY,
-    categoryid integer REFERENCES Category(id),
     name varchar(30) NOT NULL,
     description varchar(90),
     deadline date
 );
 
-CREATE TABLE PersonTask(
+CREATE TABLE PersonTaskCategory(
     taskid integer REFERENCES Task(id) ON DELETE CASCADE,
-    personid integer REFERENCES Person(id) ON DELETE CASCADE
+    personid integer REFERENCES Person(id) ON DELETE CASCADE,
+    categoryid integer REFERENCES Category(id) ON DELETE CASCADE
 );
