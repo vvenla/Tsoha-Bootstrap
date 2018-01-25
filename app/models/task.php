@@ -124,11 +124,11 @@ class Task extends BaseModel {
 
         $query2 = DB::connection()->prepare('INSERT INTO PersonTaskCategory '
                 . '(taskid, personid) '
-                . 'VALUES (:taskid, :personid)');
+                . 'VALUES (:task_id, :person_id)');
 
         $query2->execute(array(
-            'taskid' => $this->id,
-            'personid' => $user_id
+            'task_id' => $this->id,
+            'person_id' => $user_id
         ));
     }
 
@@ -153,21 +153,47 @@ class Task extends BaseModel {
         $query = DB::connection()->prepare('UPDATE PersonTaskCategory SET categoryid = :category_id '
                 . 'WHERE taskid = :task_id '
                 . 'AND personid = :user_id');
-        
+
         return $query->execute(array(
                     'category_id' => $category_id,
                     'task_id' => $this->id,
                     'user_id' => $user_id
         ));
     }
-  
 
     // Jakaa tehtävän toiselle käyttäjälle
-    public function share_with($id) {
+    public function share_with($person_id) {
         $query = DB::connection()->prepare('INSERT INTO PersonTaskCategory '
                 . '(personid, taskid) '
                 . 'VALUES (:person_id, :task_id)');
-        return $query->execute(array('task_id' => $this->id, 'person_id' => $id));
+        return $query->execute(array(
+                    'task_id' => $this->id,
+                    'person_id' => $person_id
+        ));
+    }
+
+    // Hakee tehtävät deadlinen mukaan järjestettynä
+    public static function deadlines($user_id) {
+        $query = DB::connection()->prepare('SELECT Task.* FROM Task, PersonTaskCategory '
+                . 'WHERE task.deadline IS NOT NULL '
+                . 'AND persontaskcategory.personid = :user_id '
+                . 'AND task.id = persontaskcategory.taskid '
+                . 'ORDER BY deadline ASC');
+        $query->execute(array('user_id' => $user_id));
+        
+        $tasks = array();
+        $rows = $query->fetchAll();
+        
+        foreach ($rows as $row) {
+            $tasks[] = new Task(array(
+                'id' => $row['id'],
+                'name' => $row['name'],
+                'description' => $row['description'],
+                'deadline' => $row['deadline']
+            ));
+        }
+
+        return $tasks;
     }
 
     // Poistaa tehtävän tietokannasta

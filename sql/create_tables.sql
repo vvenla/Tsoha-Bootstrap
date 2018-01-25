@@ -20,5 +20,6 @@ CREATE TABLE Task(
 CREATE TABLE PersonTaskCategory(
     taskid integer REFERENCES Task(id) ON DELETE CASCADE,
     personid integer REFERENCES Person(id) ON DELETE CASCADE,
-    categoryid integer REFERENCES Category(id) ON DELETE CASCADE
+    categoryid integer REFERENCES Category(id) ON DELETE CASCADE,
+    PRIMARY KEY (taskid, personid)
 );

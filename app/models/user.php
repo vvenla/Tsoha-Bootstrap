@@ -24,6 +24,45 @@ class User extends BaseModel {
         return NULL;
     }
 
+    // Etsii kaikki muut käyttäjät, joille tehtävää ei ole vielä jaettu
+    public static function find_other_users($task_id) {
+        $query = DB::connection()->prepare('SELECT Person.* FROM Person '
+                . 'WHERE person.id NOT IN '
+                . '(SELECT personid FROM persontaskcategory '
+                . 'WHERE taskid = :task_id)');
+        $query->execute(array('task_id' => $task_id));
+        $rows = $query->fetchAll();
+        $users = array();
+
+        foreach ($rows as $row) {
+            $users[] = new User(array(
+                'id' => $row['id'],
+                'username' => $row['username']
+            ));
+        }
+        return $users;
+    }
+    
+    // Etsii käyttäjät, joiden kanssa tehtävä on jo jaettu
+    public static function find_users_shared($user_id, $task_id) {
+        $query = DB::connection()->prepare('SELECT Person.* FROM Person '
+                . 'WHERE person.id IN '
+                . '(SELECT personid FROM persontaskcategory '
+                . 'WHERE taskid = :task_id)'
+                . 'AND person.id != :user_id');
+        $query->execute(array('user_id' => $user_id, 'task_id' => $task_id));
+        $rows = $query->fetchAll();
+        $users = array();
+
+        foreach ($rows as $row) {
+            $users[] = new User(array(
+                'id' => $row['id'],
+                'username' => $row['username']
+            ));
+        }
+        return $users;
+    }
+
     public static function authenticate($username, $password) {
         $query = DB::connection()->prepare('SELECT * FROM Person WHERE '
                 . 'username = :username AND '

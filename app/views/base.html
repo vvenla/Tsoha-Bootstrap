@@ -40,9 +40,10 @@
                     {% if user_logged_in %}
                     <ul class="nav navbar-nav">
                         <!-- Navigaation linkit -->
-                        <li><a href="{{base_path}}/main">Front page</a></li>
+                        
                         <li><a href="{{base_path}}/task/new">Create new task</a></li>
                         <li><a href="{{base_path}}/category/new">Create new category</a></li>
+                        <li><a href="{{base_path}}/task/deadlines">Deadlines</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <form method="post" action="{{base_path}}/logout">

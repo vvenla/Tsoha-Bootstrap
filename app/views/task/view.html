@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+{% import "macros/forms.html" as forms %}
+
+{% if user_logged_in %}
+
+<h1>{{name}}</h1>
+<!-- Painikkeet tähän -->
+<p>
+
+    <a href="{{base_path}}/task/{{id}}/edit" class="btn btn-primary">Edit</a>
+
+</p>
+<p>
+    {{description}}
+</p>
+<ul>
+    
+    <li>
+        <strong>Shared with: </strong>
+        {% for user in users %}
+        {{user.username}}
+        {% endfor %}
+    </li>
+</ul>
+
+<a class="btn btn-primary" href="{{base_path}}/main">Back</a>
+{{forms.delete_button("#{base_path}/task/#{id}/delete")}}
+
+
+{% endif %}
+{% endblock %}

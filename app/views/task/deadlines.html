@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+{% import "macros/forms.html" as forms %}
+
+{% if user_logged_in %}
+<h1>Deadlines</h1>
+
+
+<table class="table table-striped table-bordered">
+
+    {% for task in tasks %}
+    <tr>
+        <td>
+            <a href="{{base_path}}/task/{{task.id}}/view">{{task.name}}
+        </td>
+        
+        <td>
+            {{task.deadline}}
+        </td>
+        
+        <td>
+            {{forms.delete_button("#{base_path}/task/#{task.id}/delete", "Done!")}}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

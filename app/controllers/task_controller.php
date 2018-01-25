@@ -43,17 +43,39 @@ class TaskController extends BaseController {
         }
     }
 
-    public static function show($id) {
-        $task = Task::find($id);
-        View::make('task/show.html', array(
+    public static function show($task_id) {
+        $task = Task::find($task_id);
+        $user = self::get_user_logged_in();
+       
+        $users = User::find_users_shared($user->id, $task_id);
+        
+        View::make('task/view.html', array(
+            'id' => $task->id,
             'name' => $task->name,
             'description' => $task->description,
-            'deadline' => $task->deadline));
+            'deadline' => $task->deadline,
+            'users' => $users
+        ));
+    }
+    
+    public static function show_deadlines() {
+        $user = self::get_user_logged_in();
+        $tasks = Task::deadlines($user->id);
+        
+        View::make('task/deadlines.html', array('tasks' => $tasks));
     }
 
     public static function edit($id) {
+        $user_logged_in = self::get_user_logged_in();
+
         $task = Task::find($id);
-        View::make('task/show.html', array('attributes' => $task));
+        $users = User::find_other_users($task->id);
+        $shared_with = User::find_users_shared($user_logged_in->id, $task->id);
+        View::make('task/show.html', array(
+            'attributes' => $task,
+            'users' => $users,
+            'shared_with' => $shared_with
+        ));
     }
 
     public static function update($id) {
@@ -67,6 +89,19 @@ class TaskController extends BaseController {
         );
 
         $task = new Task($attributes);
+
+        if (empty($params['users'])) {
+            $users = array();
+        } else {
+            $users = $params['users'];
+        }
+
+
+        foreach ($users as $user) {
+
+
+            $task->share_with($user);
+        }
 
         if ($task->deadline == '') {
             $task->deadline = NULL;
@@ -89,18 +124,27 @@ class TaskController extends BaseController {
 
         $task = Task::find($task_id);
 
-        
-        if ($params['categoryid']==-1) {
+
+        if ($params['categoryid'] == -1) {
             $task->set_category(NULL, $user_logged_in->id);
             Redirect::to('/main', array('message' => 'Task removed from category'));
-        } else if ($params['categoryid']==-2) {
+        } else if ($params['categoryid'] == -2) {
             Redirect::to('/main', array('message' => 'Choose the category'));
-        }
-        else {
+        } else {
             $task->set_category($params['categoryid'], $user_logged_in->id);
             Redirect::to('/main', array('message' => 'Task moved to category'));
         }
     }
+
+//    public static function share($task_id) {
+//        $params = $_POST;
+//        
+//        $task = Task::find($task_id);
+//        
+//        $task->share_with($params['userid']);
+//        Redirect::to('/task/show.html', array('message' => 'Task shared'));
+//        
+//    }
 
     public static function delete($id) {
         $task = new Task(array('id' => $id));

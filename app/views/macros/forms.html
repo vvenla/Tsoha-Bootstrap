@@ -1,6 +1,6 @@
 {% macro delete_button(action, text) %}
-<form method="post" action="{{action}}">
-    <button type="submit" class="btn btn-primary pull-right">{{text|default('Delete')}}</button>
+<form method="post" action="{{action}}" class="destroy-form" data-confirm="Delete?">
+    <button type="submit" class="btn btn-danger pull-right">{{text|default("Delete")}}</button>
 </form>
 {% endmacro %}
 

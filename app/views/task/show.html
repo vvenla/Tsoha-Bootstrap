@@ -16,21 +16,28 @@
         <label>Deadline</label>
         <input type="date" name="deadline" class="form-control" value = "{{attributes.deadline}}">
     </div>
-    <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Share with other users
-            <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            <li><a href="#">Veera</a></li>
-            <li><a href="#">Viljami</a></li>
-        </ul>
-    </div>
+
     <div class="form-group">
-        <label>Shared with: Viljami (Toiminnallisuus lisätään myöhemmin)
+        <label>Share with other users: </label>
+        <select class="form-control" name="users[]" multiple="">
+            {% for user in users %}
+            <option value="{{user.id}}">{{user.username}}</option>
+            {% endfor %}
+        </select>
+        <label>
+            Already shared with: 
+            {% for user in shared_with %}
+            {{user.username}}
+            {% endfor %}
         </label>
-    </div>   
+    </div>
+
+     
+
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Save</button>
-        <a class="btn btn-primary" href="{{base_path}}/task">Cancel</a>
+        <a class="btn btn-primary" href="{{base_path}}/main">Cancel</a>
     </div>
 </form>
+
 {% endblock %}
